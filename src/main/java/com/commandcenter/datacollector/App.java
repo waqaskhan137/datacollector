@@ -8,9 +8,10 @@ public class App {
     public static void main(String[] args) {
         Logger.LogInfo(new Object() {
         }.getClass().getEnclosingClass().getSimpleName(), "------- Starting the FTP Download Thread ------");
-        AutoCallHandler autoCallHandler = new AutoCallHandler();
+//        AutoCallHandler autoCallHandler = new AutoCallHandler();
 
-        Thread autoCallHandlerThread = new Thread(autoCallHandler);
+//        Thread autoCallHandlerThread = new Thread(autoCallHandler);
+        Thread autoCallHandlerThread = new Thread();
         autoCallHandlerThread.setName("Auto Call Handler Thread");
         autoCallHandlerThread.start();
         Logger.LogInfo(new Object() {
