@@ -1,8 +1,9 @@
 package com.commandcenter.datacollector.logger.email;
 
-import com.commandcenter.datacollector.logger.Logger;
 import com.commandcenter.datacollector.config.ApplicationConfigurations;
 import com.sun.mail.smtp.SMTPTransport;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -12,6 +13,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class EmailNotification {
+    static Logger log = LogManager.getLogger(EmailNotification.class.getName());
 
     String exception;
     private static final String recipients = ApplicationConfigurations.getRecipients();
@@ -41,8 +43,7 @@ public class EmailNotification {
             msg.setHeader("X-Priority", "1");
             msg.setFrom(new InternetAddress(EMAIL_FROM));
 
-            msg.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(recipients, false));
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients, false));
 
             msg.setSubject(EMAIL_SUBJECT);
 
@@ -62,8 +63,7 @@ public class EmailNotification {
             t.close();
 
         } catch (MessagingException e) {
-            Logger.LogException(new Object() {
-            }.getClass().getEnclosingClass().getSimpleName(), "Exception [ " + e.getCause() + " ]", e);
+            log.error("Exception [ " + e.getCause() + " ]", e);
         }
 
     }
