@@ -1,10 +1,12 @@
 package com.commandcenter.datacollector.config;
 
-import com.commandcenter.datacollector.logger.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
 public class ClientList {
+    static Logger log = LogManager.getLogger(ClientList.class.getName());
 
     private static ArrayList<AfinitiClient> afinitiClients = new ArrayList<AfinitiClient>();
 
@@ -18,23 +20,23 @@ public class ClientList {
             }
         } catch (Exception e) {
 
-            Logger.LogError("SensorList", e.getMessage());
+            log.error("SensorList", e.getMessage());
         }
-        Logger.LogWarn("ClientList", "AfinitiClient with Sensor Title[ " + clientName + " not found in client list");
+        log.warn("ClientList", "AfinitiClient with Sensor Title[ " + clientName + " not found in client list");
         return null;
     }
 
     public static void add(AfinitiClient afinitiClient) {
         if (afinitiClient != null) {
             afinitiClients.add(afinitiClient);
-            Logger.LogInfo("ClientList", "AfinitiClient [ " + afinitiClient.getClientName() + " ] has been added to the afinitiClient list. ");
+            log.info("ClientList", "AfinitiClient [ " + afinitiClient.getClientName() + " ] has been added to the afinitiClient list. ");
         }
     }
 
     public static void remove(AfinitiClient afinitiClient) {
         if (afinitiClient != null) {
             afinitiClients.remove(afinitiClient);
-            Logger.LogInfo("ClientList", "AfinitiClient [ " + afinitiClient.getClientName() + " ] has been removed.");
+            log.info("ClientList", "AfinitiClient [ " + afinitiClient.getClientName() + " ] has been removed.");
         }
     }
 

@@ -1,7 +1,8 @@
 package com.commandcenter.datacollector.utils;
 
-import com.commandcenter.datacollector.logger.Logger;
 import com.commandcenter.datacollector.logger.email.EmailNotification;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,6 +10,8 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class MysqlConnect {
+    static Logger log = LogManager.getLogger(MysqlConnect.class.getName());
+
     public String name;
     // init database constants
     private String DATABASE_DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -76,7 +79,7 @@ public class MysqlConnect {
     public void setDATABASE_URL(String DATABASE_URL) {
         DATABASE_URL = "jdbc:mysql://" + DATABASE_URL + "/monitor4?connectTimeout=5000&socketTimeout=30000&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=";
 //        DATABASE_URL = "jdbc:mysql://" + DATABASE_URL + "/monitor4?serverTimezone=UTC";
-        Logger.LogDebug(new Object() {
+        log.info(new Object() {
         }.getClass().getEnclosingClass().getSimpleName(), "Database URL [ " + DATABASE_URL + " ]");
 
         this.DATABASE_URL = DATABASE_URL;
@@ -105,7 +108,7 @@ public class MysqlConnect {
     // create properties
     private Properties getProperties() {
         if (properties == null) {
-            Logger.LogDebug("com.rmwaqas.utility.MysqlConnect", "Please set the credentials and properties first");
+            log.info("com.rmwaqas.utility.MysqlConnect", "Please set the credentials and properties first");
         }
         return properties;
     }
@@ -117,11 +120,11 @@ public class MysqlConnect {
                 setProperties();
                 setDATABASE_URL(getArchivalDB());
                 Class.forName(DATABASE_DRIVER);
-                Logger.LogDebug(new Object() {
+                log.info(new Object() {
                 }.getClass().getEnclosingClass().getSimpleName(), "Database URL [ " + DATABASE_URL + " ] Database Driver [ " + DATABASE_DRIVER + " ]");
                 connection = DriverManager.getConnection(DATABASE_URL, getProperties());
             } catch (ClassNotFoundException | SQLException e) {
-                Logger.LogException("com.rmwaqas.utility.MysqlConnect", "Connection Exception [ " + e.getMessage(), e);
+                log.error("com.rmwaqas.utility.MysqlConnect", "Connection Exception [ " + e.getMessage(), e);
                 new EmailNotification("Archival DB Connection Exception \n [ " + e.getLocalizedMessage() + " ] \n " + e);
             }
         }
@@ -136,7 +139,7 @@ public class MysqlConnect {
                 connection.close();
                 connection = null;
             } catch (SQLException e) {
-                Logger.LogException(new Object() {
+                log.error(new Object() {
                 }.getClass().getEnclosingClass().getSimpleName(), "Exception ", e);
                 new EmailNotification("Exception at disconnecting the database. \n [ " + e.getLocalizedMessage() + " ] \n " + e);
             }

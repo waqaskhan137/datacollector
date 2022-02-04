@@ -1,8 +1,8 @@
 package com.commandcenter.datacollector.plugins.inputs.email;
 
-import com.commandcenter.datacollector.logger.Logger;
 import com.commandcenter.datacollector.config.ApplicationConfigurations;
 import com.commandcenter.datacollector.plugins.inputs.Input;
+import com.commandcenter.datacollector.utils.MysqlConnect;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.PropertySet;
 import microsoft.exchange.webservices.data.core.enumeration.misc.ExchangeVersion;
@@ -23,6 +23,8 @@ import microsoft.exchange.webservices.data.search.FindFoldersResults;
 import microsoft.exchange.webservices.data.search.FindItemsResults;
 import microsoft.exchange.webservices.data.search.FolderView;
 import microsoft.exchange.webservices.data.search.ItemView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 
 import java.net.URI;
@@ -31,6 +33,7 @@ import java.net.URI;
  * @author Rana M Waqas
  */
 public class MSExchangeEmailService implements Input {
+    static Logger log = LogManager.getLogger(MysqlConnect.class.getName());
 
     ExchangeService service;
     String mailbox;
@@ -75,8 +78,7 @@ public class MSExchangeEmailService implements Input {
             setService(service);
 
         } catch (Exception e) {
-            Logger.LogException(new Object() {
-            }.getClass().getEnclosingClass().getSimpleName(), "Exception ", e);
+            log.error("Exception ", e);
         }
 
 
@@ -101,8 +103,7 @@ public class MSExchangeEmailService implements Input {
                 }
             }
         } catch (Exception e) {
-            Logger.LogException(new Object() {
-            }.getClass().getEnclosingClass().getSimpleName(), "Exception ", e);
+            log.error("Exception ", e);
         }
     }
 
@@ -133,12 +134,10 @@ public class MSExchangeEmailService implements Input {
                 item.delete(DeleteMode.HardDelete);
             }
         } else {
-            Logger.LogInfo(new Object() {
-            }.getClass().getEnclosingClass().getSimpleName(), "There is no new email in folder");
+            log.info("There is no new email in folder");
         }
 
-        Logger.LogInfo(new Object() {
-        }.getClass().getEnclosingClass().getSimpleName(), "Closing the Exchange Service.");
+        log.info("Closing the Exchange Service.");
         getService().close();
     }
 

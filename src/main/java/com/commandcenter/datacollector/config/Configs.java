@@ -1,6 +1,7 @@
 package com.commandcenter.datacollector.config;
 
-import com.commandcenter.datacollector.logger.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -10,6 +11,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class Configs {
+    static Logger log = LogManager.getLogger(Configs.class.getName());
+
     ApplicationConfigurations applicationConfigurations;
 
     static ClientList clientList;
@@ -61,14 +64,14 @@ public class Configs {
                             applicationConfigurations.setInterval(Integer.parseInt(pair.getValue().toString()));
                             break;
                         default:
-                            Logger.LogInfo(new Object() {
+                            log.info(new Object() {
                             }.getClass().getEnclosingClass().getSimpleName(), "Unrecognizable key [ " + key + " ]");
                     }
                 }
             }
 
         } catch (Exception e) {
-            Logger.LogException(new Object() {
+            log.error(new Object() {
             }.getClass().getEnclosingClass().getSimpleName(), "Exception [ " + e.getCause() + " ]", e);
         }
     }

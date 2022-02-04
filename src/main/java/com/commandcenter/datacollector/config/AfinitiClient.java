@@ -1,11 +1,12 @@
 package com.commandcenter.datacollector.config;
 
-import com.commandcenter.datacollector.logger.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
 public class AfinitiClient {
-
+    static Logger log = LogManager.getLogger(AfinitiClient.class.getName());
     String clientName;
     String folderName;
     private String ivrName;
@@ -49,16 +50,14 @@ public class AfinitiClient {
         }
 
         phoneArrayList.add(callString);
-        Logger.LogInfo(String.valueOf(new Object() {
-        }.getClass().getEnclosingClass().getSimpleName()), "Added the file [ " + callString + " ]");
+        log.info("Added the file [ " + callString + " ]");
 
     }
 
     public void removeCallString(String callString) {
         if (phoneArrayList != null) {
             phoneArrayList.remove(callString);
-            Logger.LogInfo(String.valueOf(new Object() {
-            }.getClass().getEnclosingClass().getSimpleName()), "Removed the file [ " + callString + " ]");
+            log.info( "Removed the file [ " + callString + " ]");
         }
     }
 
