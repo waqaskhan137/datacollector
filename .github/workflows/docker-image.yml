@@ -5,14 +5,22 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  issues:
+    types: [ assigned ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+  create_issue_branch_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Issue Branch
+        uses: robvanderleek/create-issue-branch@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
