@@ -1,6 +1,6 @@
-package com.commandcenter.autocall.configs;
+package com.commandcenter.datacollector.config;
 
-import com.commandcenter.autocall.cclogger.CCLogger;
+import com.commandcenter.datacollector.logger.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -61,14 +61,14 @@ public class Configs {
                             applicationConfigurations.setInterval(Integer.parseInt(pair.getValue().toString()));
                             break;
                         default:
-                            CCLogger.LogInfo(new Object() {
+                            Logger.LogInfo(new Object() {
                             }.getClass().getEnclosingClass().getSimpleName(), "Unrecognizable key [ " + key + " ]");
                     }
                 }
             }
 
         } catch (Exception e) {
-            CCLogger.LogException(new Object() {
+            Logger.LogException(new Object() {
             }.getClass().getEnclosingClass().getSimpleName(), "Exception [ " + e.getCause() + " ]", e);
         }
     }

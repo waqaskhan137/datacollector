@@ -1,8 +1,8 @@
-package com.commandcenter.autocall.MSExchangeModule;
+package com.commandcenter.datacollector.plugins.inputs.email;
 
-import com.commandcenter.autocall.Processing.DataProcess;
-import com.commandcenter.autocall.cclogger.CCLogger;
-import com.commandcenter.autocall.configs.ApplicationConfigurations;
+import com.commandcenter.datacollector.logger.Logger;
+import com.commandcenter.datacollector.config.ApplicationConfigurations;
+import com.commandcenter.datacollector.plugins.inputs.Input;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.PropertySet;
 import microsoft.exchange.webservices.data.core.enumeration.misc.ExchangeVersion;
@@ -30,13 +30,11 @@ import java.net.URI;
 /**
  * @author Rana M Waqas
  */
-public class MSExchangeEmailService {
+public class MSExchangeEmailService implements Input {
 
     ExchangeService service;
     String mailbox;
     String password;
-//    AfinitiClient client;
-
 
     public String getMailbox() {
         return mailbox;
@@ -77,7 +75,7 @@ public class MSExchangeEmailService {
             setService(service);
 
         } catch (Exception e) {
-            CCLogger.LogException(new Object() {
+            Logger.LogException(new Object() {
             }.getClass().getEnclosingClass().getSimpleName(), "Exception ", e);
         }
 
@@ -103,7 +101,7 @@ public class MSExchangeEmailService {
                 }
             }
         } catch (Exception e) {
-            CCLogger.LogException(new Object() {
+            Logger.LogException(new Object() {
             }.getClass().getEnclosingClass().getSimpleName(), "Exception ", e);
         }
     }
@@ -123,11 +121,6 @@ public class MSExchangeEmailService {
             for (Item item : findResults.getItems()) {
                 // Do something with the item as shown
                 String body = item.getBody().toString().trim();
-//                CCLogger.LogInfo(new Object() {
-//                }.getClass().getEnclosingClass().getSimpleName(), "Subject [ " + item.getSubject() + " ]");
-//                CCLogger.LogInfo(new Object() {
-//                }.getClass().getEnclosingClass().getSimpleName(), "Body [ " + item.getBody().toString().trim() + " ]");
-
                 String callData = body;
                 if (body.contains("mimecast.com")) {
                     callData = removeUrl(item.getBody().toString());
@@ -135,20 +128,16 @@ public class MSExchangeEmailService {
                     callData.replace("Attention: This email was sent from someone outside of Afiniti. Always use caution when opening attachments, clicking links from unknown senders or when receiving unexpected emails.", "").trim();
                 }
 
-
-                new DataProcess(callData).callStringParser();
-
-//                CCLogger.LogInfo(new Object() {
-//                }.getClass().getEnclosingClass().getSimpleName(), "Removing the email.");
+                //inset the data in db
 
                 item.delete(DeleteMode.HardDelete);
             }
         } else {
-            CCLogger.LogInfo(new Object() {
+            Logger.LogInfo(new Object() {
             }.getClass().getEnclosingClass().getSimpleName(), "There is no new email in folder");
         }
 
-        CCLogger.LogInfo(new Object() {
+        Logger.LogInfo(new Object() {
         }.getClass().getEnclosingClass().getSimpleName(), "Closing the Exchange Service.");
         getService().close();
     }

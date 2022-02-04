@@ -1,7 +1,7 @@
-package com.commandcenter.autocall.cclogger.email;
+package com.commandcenter.datacollector.logger.email;
 
-import com.commandcenter.autocall.cclogger.CCLogger;
-import com.commandcenter.autocall.configs.ApplicationConfigurations;
+import com.commandcenter.datacollector.logger.Logger;
+import com.commandcenter.datacollector.config.ApplicationConfigurations;
 import com.sun.mail.smtp.SMTPTransport;
 
 import javax.mail.Message;
@@ -62,7 +62,7 @@ public class EmailNotification {
             t.close();
 
         } catch (MessagingException e) {
-            CCLogger.LogException(new Object() {
+            Logger.LogException(new Object() {
             }.getClass().getEnclosingClass().getSimpleName(), "Exception [ " + e.getCause() + " ]", e);
         }
 

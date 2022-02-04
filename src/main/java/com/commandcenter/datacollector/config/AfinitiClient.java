@@ -1,6 +1,6 @@
-package com.commandcenter.autocall.configs;
+package com.commandcenter.datacollector.config;
 
-import com.commandcenter.autocall.cclogger.CCLogger;
+import com.commandcenter.datacollector.logger.Logger;
 
 import java.util.ArrayList;
 
@@ -49,7 +49,7 @@ public class AfinitiClient {
         }
 
         phoneArrayList.add(callString);
-        CCLogger.LogInfo(String.valueOf(new Object() {
+        Logger.LogInfo(String.valueOf(new Object() {
         }.getClass().getEnclosingClass().getSimpleName()), "Added the file [ " + callString + " ]");
 
     }
@@ -57,7 +57,7 @@ public class AfinitiClient {
     public void removeCallString(String callString) {
         if (phoneArrayList != null) {
             phoneArrayList.remove(callString);
-            CCLogger.LogInfo(String.valueOf(new Object() {
+            Logger.LogInfo(String.valueOf(new Object() {
             }.getClass().getEnclosingClass().getSimpleName()), "Removed the file [ " + callString + " ]");
         }
     }

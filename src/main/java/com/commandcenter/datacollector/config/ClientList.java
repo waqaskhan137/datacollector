@@ -1,6 +1,6 @@
-package com.commandcenter.autocall.configs;
+package com.commandcenter.datacollector.config;
 
-import com.commandcenter.autocall.cclogger.CCLogger;
+import com.commandcenter.datacollector.logger.Logger;
 
 import java.util.ArrayList;
 
@@ -18,23 +18,23 @@ public class ClientList {
             }
         } catch (Exception e) {
 
-            CCLogger.LogError("SensorList", e.getMessage());
+            Logger.LogError("SensorList", e.getMessage());
         }
-        CCLogger.LogWarn("ClientList", "AfinitiClient with Sensor Title[ " + clientName + " not found in client list");
+        Logger.LogWarn("ClientList", "AfinitiClient with Sensor Title[ " + clientName + " not found in client list");
         return null;
     }
 
     public static void add(AfinitiClient afinitiClient) {
         if (afinitiClient != null) {
             afinitiClients.add(afinitiClient);
-            CCLogger.LogInfo("ClientList", "AfinitiClient [ " + afinitiClient.getClientName() + " ] has been added to the afinitiClient list. ");
+            Logger.LogInfo("ClientList", "AfinitiClient [ " + afinitiClient.getClientName() + " ] has been added to the afinitiClient list. ");
         }
     }
 
     public static void remove(AfinitiClient afinitiClient) {
         if (afinitiClient != null) {
             afinitiClients.remove(afinitiClient);
-            CCLogger.LogInfo("ClientList", "AfinitiClient [ " + afinitiClient.getClientName() + " ] has been removed.");
+            Logger.LogInfo("ClientList", "AfinitiClient [ " + afinitiClient.getClientName() + " ] has been removed.");
         }
     }
 

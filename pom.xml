@@ -74,42 +74,12 @@
             <version>2.3.1</version>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>org.glassfish.jaxb</groupId>-->
-        <!--            <artifactId>jaxb-runtime</artifactId>-->
-        <!--            <version>2.3.1</version>-->
-        <!--        </dependency>-->
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.asynchttpclient</groupId>-->
-        <!--            <artifactId>async-http-Client</artifactId>-->
-        <!--            <version>2.2.0</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>com.squareup.okhttp</groupId>-->
-        <!--            <artifactId>okhttp</artifactId>-->
-        <!--            <version>2.7.5</version>-->
-        <!--        </dependency>-->
-
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.30</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.mashape.unirest/unirest-java -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.mashape.unirest</groupId>-->
-        <!--            <artifactId>unirest-java</artifactId>-->
-        <!--            <version>1.4.9</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.jetbrains</groupId>-->
-        <!--            <artifactId>annotations</artifactId>-->
-        <!--            <version>RELEASE</version>-->
-        <!--            <scope>compile</scope>-->
-        <!--        </dependency>-->
-
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>

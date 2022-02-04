@@ -1,4 +1,4 @@
-package com.commandcenter.autocall.configs;
+package com.commandcenter.datacollector.config;
 
 public class ApplicationConfigurations {
     static String email;
