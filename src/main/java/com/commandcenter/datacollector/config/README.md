@@ -1,0 +1,1 @@
+Intent of the file is to write configuration details here. 
