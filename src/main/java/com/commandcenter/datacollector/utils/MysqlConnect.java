@@ -74,7 +74,7 @@ public class MysqlConnect {
     }
 
     public void setDATABASE_URL(String DATABASE_URL) {
-        DATABASE_URL = "jdbc:mysql://" + DATABASE_URL + "/monitor4?connectTimeout=5000&socketTimeout=30000&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=" + AppConfigurations.getServerTimezone();
+        DATABASE_URL = "jdbc:mysql://" + DATABASE_URL + "/monitor4?connectTimeout=5000&socketTimeout=30000&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=";
 //        DATABASE_URL = "jdbc:mysql://" + DATABASE_URL + "/monitor4?serverTimezone=UTC";
         Logger.LogDebug(new Object() {
         }.getClass().getEnclosingClass().getSimpleName(), "Database URL [ " + DATABASE_URL + " ]");
