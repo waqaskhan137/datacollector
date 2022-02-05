@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: com.commandcenter.datacollector.App
+Main-Class: com.commandcenter.datacollector.Main
 

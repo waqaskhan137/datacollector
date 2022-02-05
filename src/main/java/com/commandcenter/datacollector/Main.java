@@ -3,8 +3,8 @@ package com.commandcenter.datacollector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class App {
-    static Logger log = LogManager.getLogger(App.class.getName());
+public class Main {
+    static Logger log = LogManager.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
 //        Logger.LogInfo(new Object() {
@@ -22,7 +22,15 @@ public class App {
 //        }.getClass().getEnclosingClass().getSimpleName(), "Adding shutdown hook for the auto call notification service.");
 //        Runtime r = Runtime.getRuntime();
 //        r.addShutdownHook(new ShutdownThread());
-        System.out.println("Hello World");
-        log.info("Starting the application");
+
+        while (true) {
+            System.out.println("Hello World");
+            log.info("Starting the application");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                log.error("Error while sleeping the thread", e);
+            }
+        }
     }
 }
