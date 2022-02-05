@@ -1,6 +1,6 @@
 package com.commandcenter.datacollector;
 
-public class Main {
+public class App {
 
     public static void main(String[] args) {
 //        Logger.LogInfo(new Object() {
