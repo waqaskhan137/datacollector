@@ -1,1 +1,1 @@
-Basic ReadMe for the project. 
+#A simple data collector in Java  
