@@ -1,6 +1,6 @@
 # A simple data collector in Java
 
-##Tasks
+## Tasks
 - [ ] Email input  plugin 
 - [ ] postgresql database output plugin 
 - [ ] MySQL output plugin 
