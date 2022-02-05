@@ -1,4 +1,4 @@
-FROM openjdk:19-jdk-alpine3.15 as base
+FROM openjdk:19-jdk-alpine as base
 
 WORKDIR /downloads
 
@@ -11,11 +11,15 @@ RUN rm -rf /usr/maven/apache-maven-3.6.3-bin.tar.gz
 RUN apk add nano
 
 ENV MAVEN_HOME /usr/maven/apache-maven-3.6.3
+
+WORKDIR /build
+
 COPY pom.xml .
 RUN mvn clean package -Dmaven.main.skip -Dmaven.test.skip && rm -r target
 
 COPY src/ /build/src/
 RUN mvn clean package -Dmaven.test.skip
 
-RUN cp /build/target/*jar-with-dependencies.jar app.jar
+
+RUN cp /build/target/datacollector-0.1.0.jar app.jar
 CMD ["java", "-jar", "app.jar"]
