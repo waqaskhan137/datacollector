@@ -19,6 +19,7 @@ import microsoft.exchange.webservices.data.core.service.schema.FolderSchema;
 import microsoft.exchange.webservices.data.core.service.schema.ItemSchema;
 import microsoft.exchange.webservices.data.credential.ExchangeCredentials;
 import microsoft.exchange.webservices.data.credential.WebCredentials;
+import microsoft.exchange.webservices.data.property.complex.AttachmentCollection;
 import microsoft.exchange.webservices.data.property.complex.FolderId;
 import microsoft.exchange.webservices.data.property.complex.Mailbox;
 import microsoft.exchange.webservices.data.search.FindFoldersResults;
@@ -119,6 +120,9 @@ public class MSExchange implements Input {
             for (Item item : findResults.getItems()) {
                 String body = item.getBody().toString().trim();
                 String subject = item.getSubject().trim();
+                AttachmentCollection attachment = item.getAttachments();
+                attachment.save();
+
                 item.delete(DeleteMode.HardDelete);
             }
         } else {
