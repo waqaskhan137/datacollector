@@ -7,7 +7,7 @@ public class ApplicationConfigurations {
     @Getter @Setter
     static String email;
     @Getter @Setter
-    static String password;
+    static String emailPassword;
     @Getter @Setter
     static String recipients;
     @Getter @Setter
@@ -17,5 +17,8 @@ public class ApplicationConfigurations {
     @Getter @Setter
     static String smtpHost;
     @Getter @Setter
-    static String userName;
+    static String smtpUserName;
+    @Getter @Setter
+    static String smtpPassword;
+
 }

@@ -52,7 +52,7 @@ public class Configs {
                             applicationConfigurations.setEmail(pair.getValue().toString());
                             break;
                         case "password":
-                            applicationConfigurations.setPassword(pair.getValue().toString());
+                            applicationConfigurations.setEmailPassword(pair.getValue().toString());
                             break;
                         case "recipients":
                             applicationConfigurations.setRecipients(pair.getValue().toString());

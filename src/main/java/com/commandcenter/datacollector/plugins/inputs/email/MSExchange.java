@@ -27,7 +27,6 @@ import microsoft.exchange.webservices.data.search.FolderView;
 import microsoft.exchange.webservices.data.search.ItemView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jsoup.Jsoup;
 
 import java.net.URI;
 
@@ -64,9 +63,8 @@ public class MSExchange implements Input {
 
 
     public MSExchange() {
-        // TODO: 11/26/2019 getting the mailbox credentials from config file.
         setMailbox(ApplicationConfigurations.getEmail());
-        setPassword(ApplicationConfigurations.getPassword());
+        setPassword(ApplicationConfigurations.getEmailPassword());
 
         service = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
         ExchangeCredentials credentials = new WebCredentials(getMailbox(), getPassword());
@@ -111,7 +109,6 @@ public class MSExchange implements Input {
 
         folder.load();
         if (folder.getTotalCount() > 0) {
-            //getting 10 items of the folder
             ItemView view2 = new ItemView(folder.getTotalCount());
             view2.getOrderBy().add(ItemSchema.DateTimeReceived, SortDirection.Descending);
             view2.setPropertySet(new PropertySet(BasePropertySet.IdOnly, ItemSchema.Subject, ItemSchema.DateTimeReceived));
@@ -120,35 +117,15 @@ public class MSExchange implements Input {
             service.loadPropertiesForItems(findResults, PropertySet.FirstClassProperties);
 
             for (Item item : findResults.getItems()) {
-                // Do something with the item as shown
                 String body = item.getBody().toString().trim();
-                String callData = body;
-                if (body.contains("mimecast.com")) {
-                    callData = removeUrl(item.getBody().toString());
-                } else {
-                    callData.replace("Attention: This email was sent from someone outside of Afiniti. Always use caution when opening attachments, clicking links from unknown senders or when receiving unexpected emails.", "").trim();
-                }
-
-                //inset the data in db
-
+                String subject = item.getSubject().trim();
                 item.delete(DeleteMode.HardDelete);
             }
         } else {
-            log.info("There is no new email in folder");
+            log.error("There is no new email in folder");
         }
 
         log.info("Closing the Exchange Service.");
         getService().close();
     }
-
-    // TODO: 2/6/2022 move removeUrl() to processor
-    private String removeUrl(String msg) {
-        String callData = Jsoup.parse(msg).text();
-
-        callData = callData.replaceAll("Attention: This email was sent from someone outside of Afiniti. Always use caution when opening attachments, clicking links from unknown senders or when receiving unexpected emails.", "").trim();
-        callData = callData.replaceAll("Call", "|Call");
-        return callData;
-    }
-
-
 }
