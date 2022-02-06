@@ -32,13 +32,27 @@ import java.net.URI;
 /**
  * @author Rana M Waqas
  */
-public class MSExchangeEmailService implements Input {
+public class MSExchange implements Input {
     static Logger log = LogManager.getLogger(MysqlConnect.class.getName());
 
     ExchangeService service;
     String mailbox;
     String password;
 
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void fetch() {
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
     public String getMailbox() {
         return mailbox;
     }
@@ -63,7 +77,7 @@ public class MSExchangeEmailService implements Input {
         this.service = service;
     }
 
-    public MSExchangeEmailService() {
+    public MSExchange() {
         // TODO: 11/26/2019 getting the mailbox credentials from config file.
         setMailbox(ApplicationConfigurations.getEmail());
         setPassword(ApplicationConfigurations.getPassword());
@@ -149,4 +163,6 @@ public class MSExchangeEmailService implements Input {
         callData = callData.replaceAll("Call", "|Call");
         return callData;
     }
+
+
 }
