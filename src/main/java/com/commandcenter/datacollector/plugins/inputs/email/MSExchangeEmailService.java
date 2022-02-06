@@ -141,6 +141,7 @@ public class MSExchangeEmailService implements Input {
         getService().close();
     }
 
+    // TODO: 2/6/2022 move removeUrl() to processor
     private String removeUrl(String msg) {
         String callData = Jsoup.parse(msg).text();
 
