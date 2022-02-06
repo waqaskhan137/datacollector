@@ -13,21 +13,20 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-public class EmailNotification implements Notifier {
-    static Logger log = LogManager.getLogger(EmailNotification.class.getName());
+public class Notification implements Notifier {
+    static Logger log = LogManager.getLogger(Notification.class.getName());
 
-    String exception;
+    private String message;
+    private String subject;
     private static final String recipients = ApplicationConfigurations.getRecipients();
-    private static final String SMTP_SERVER = "afinitismtp.afiniti.com";
+    private static final String SMTP_SERVER = ApplicationConfigurations.getSmtpHost();
     private static final String USERNAME = "";
     private static final String PASSWORD = "";
 
     private static final String EMAIL_FROM = "ps.autocallnotification@afiniti.com";
 
-    private static final String EMAIL_SUBJECT = "Auto Call Notification V5 - Exception Alert.";
-
-    public EmailNotification(String exception) {
-        this.exception = exception;
+    public Notification(String message) {
+        this.message = message;
     }
 
     public void sendEmail() {
@@ -46,10 +45,10 @@ public class EmailNotification implements Notifier {
 
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients, false));
 
-            msg.setSubject(EMAIL_SUBJECT);
+            msg.setSubject(subject);
 
             //TEXT email
-            msg.setText(exception);
+            msg.setText(message);
 
             SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
 
@@ -67,5 +66,12 @@ public class EmailNotification implements Notifier {
             log.error("Exception [ " + e.getCause() + " ]", e);
         }
 
+    }
+
+    @Override
+    public void notify(String message, String subject) {
+        this.message = message;
+        this.subject = subject;
+        sendEmail();
     }
 }

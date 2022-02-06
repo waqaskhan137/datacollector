@@ -1,6 +1,6 @@
 package com.commandcenter.datacollector.utils;
 
-import com.commandcenter.datacollector.notifier.email.EmailNotification;
+import com.commandcenter.datacollector.notifier.email.Notification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -125,7 +125,7 @@ public class MysqlConnect {
                 connection = DriverManager.getConnection(DATABASE_URL, getProperties());
             } catch (ClassNotFoundException | SQLException e) {
                 log.error("com.rmwaqas.utility.MysqlConnect", "Connection Exception [ " + e.getMessage(), e);
-                new EmailNotification("Archival DB Connection Exception \n [ " + e.getLocalizedMessage() + " ] \n " + e);
+                new Notification("Archival DB Connection Exception \n [ " + e.getLocalizedMessage() + " ] \n " + e);
             }
         }
         return connection;
@@ -141,7 +141,7 @@ public class MysqlConnect {
             } catch (SQLException e) {
                 log.error(new Object() {
                 }.getClass().getEnclosingClass().getSimpleName(), "Exception ", e);
-                new EmailNotification("Exception at disconnecting the database. \n [ " + e.getLocalizedMessage() + " ] \n " + e);
+                new Notification("Exception at disconnecting the database. \n [ " + e.getLocalizedMessage() + " ] \n " + e);
             }
         }
     }
