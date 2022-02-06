@@ -1,6 +1,7 @@
-package com.commandcenter.datacollector.logger.email;
+package com.commandcenter.datacollector.notifier.email;
 
 import com.commandcenter.datacollector.config.ApplicationConfigurations;
+import com.commandcenter.datacollector.notifier.Notifier;
 import com.sun.mail.smtp.SMTPTransport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +13,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-public class EmailNotification {
+public class EmailNotification implements Notifier {
     static Logger log = LogManager.getLogger(EmailNotification.class.getName());
 
     String exception;

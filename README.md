@@ -5,3 +5,5 @@
 - [ ] postgresql database output plugin 
 - [ ] MySQL output plugin 
 - [ ] file output plugin 
+- [ ] move removeUrl() to processor
+- [ ] fixing logs levels

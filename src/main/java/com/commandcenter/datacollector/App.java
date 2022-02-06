@@ -1,8 +1,14 @@
 package com.commandcenter.datacollector;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class App {
 
+    static Logger log = LogManager.getLogger(App.class.getName());
+
     public static void main(String[] args) {
+
 //        Logger.LogInfo(new Object() {
 //        }.getClass().getEnclosingClass().getSimpleName(), "------- Starting the FTP Download Thread ------");
 ////        AutoCallHandler autoCallHandler = new AutoCallHandler();
@@ -20,7 +26,10 @@ public class App {
 //        r.addShutdownHook(new ShutdownThread());
 
         while (true) {
-            System.out.println("Hello World");
+            // TODO: 2/6/2022 fixing the logs levels
+            log.info("This from log4j info level");
+            log.warn("This from log4j warn level");
+            log.error("This from log4j error level");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

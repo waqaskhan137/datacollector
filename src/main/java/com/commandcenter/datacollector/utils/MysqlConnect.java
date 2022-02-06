@@ -1,6 +1,6 @@
 package com.commandcenter.datacollector.utils;
 
-import com.commandcenter.datacollector.logger.email.EmailNotification;
+import com.commandcenter.datacollector.notifier.email.EmailNotification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
