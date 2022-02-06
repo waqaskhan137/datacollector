@@ -3,6 +3,8 @@ package com.commandcenter.datacollector.plugins.inputs.email;
 import com.commandcenter.datacollector.config.ApplicationConfigurations;
 import com.commandcenter.datacollector.plugins.inputs.Input;
 import com.commandcenter.datacollector.utils.MysqlConnect;
+import lombok.Getter;
+import lombok.Setter;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.PropertySet;
 import microsoft.exchange.webservices.data.core.enumeration.misc.ExchangeVersion;
@@ -35,8 +37,14 @@ import java.net.URI;
 public class MSExchange implements Input {
     static Logger log = LogManager.getLogger(MysqlConnect.class.getName());
 
+    @Setter
+    @Getter
     ExchangeService service;
+    @Setter
+    @Getter
     String mailbox;
+    @Setter
+    @Getter
     String password;
 
     @Override
@@ -53,29 +61,7 @@ public class MSExchange implements Input {
     public void stop() {
 
     }
-    public String getMailbox() {
-        return mailbox;
-    }
 
-    public void setMailbox(String mailbox) {
-        this.mailbox = mailbox;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public ExchangeService getService() {
-        return service;
-    }
-
-    public void setService(ExchangeService service) {
-        this.service = service;
-    }
 
     public MSExchange() {
         // TODO: 11/26/2019 getting the mailbox credentials from config file.
