@@ -16,4 +16,6 @@ public class ApplicationConfigurations {
     static int interval;
     @Getter @Setter
     static String smtpHost;
+    @Getter @Setter
+    static String userName;
 }

@@ -20,10 +20,10 @@ public class Notification implements Notifier {
     private String subject;
     private static final String recipients = ApplicationConfigurations.getRecipients();
     private static final String SMTP_SERVER = ApplicationConfigurations.getSmtpHost();
-    private static final String USERNAME = "";
-    private static final String PASSWORD = "";
+    private static final String USERNAME = ApplicationConfigurations.getUserName();
+    private static final String PASSWORD = ApplicationConfigurations.getPassword();
 
-    private static final String EMAIL_FROM = "ps.autocallnotification@afiniti.com";
+    private static final String EMAIL_FROM = "datacollector@luminent.com";
 
     public Notification(String message) {
         this.message = message;
