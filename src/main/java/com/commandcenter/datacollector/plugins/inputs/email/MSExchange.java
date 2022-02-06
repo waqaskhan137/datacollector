@@ -77,7 +77,9 @@ public class MSExchange implements Input {
         getService().close();
     }
 
-
+    /**
+     * Initialize the Exchange Service
+     */
     public void initialize() {
         setMailbox(ApplicationConfigurations.getEmail());
         setPassword(ApplicationConfigurations.getEmailPassword());
@@ -98,6 +100,10 @@ public class MSExchange implements Input {
 
     }
 
+    /**
+     * Search for the folder in the Exchange Server
+     * @return
+     */
     public Folder searchFolder() {
 
         try {
@@ -122,6 +128,12 @@ public class MSExchange implements Input {
         return null;
     }
 
+    /**
+     * Gets messages from the Inbox folder.
+     * @param folder
+     * @return
+     * @throws Exception
+     */
     private MessageList getSMTPMessages(Folder folder) throws Exception {
         MessageList messageList = new MessageList();
         folder.load();
