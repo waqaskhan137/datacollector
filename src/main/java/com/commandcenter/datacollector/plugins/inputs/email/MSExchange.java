@@ -2,6 +2,8 @@ package com.commandcenter.datacollector.plugins.inputs.email;
 
 import com.commandcenter.datacollector.config.ApplicationConfigurations;
 import com.commandcenter.datacollector.plugins.inputs.Input;
+import com.commandcenter.datacollector.plugins.inputs.email.message.Message;
+import com.commandcenter.datacollector.plugins.inputs.email.message.MessageList;
 import com.commandcenter.datacollector.utils.MysqlConnect;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +21,7 @@ import microsoft.exchange.webservices.data.core.service.schema.FolderSchema;
 import microsoft.exchange.webservices.data.core.service.schema.ItemSchema;
 import microsoft.exchange.webservices.data.credential.ExchangeCredentials;
 import microsoft.exchange.webservices.data.credential.WebCredentials;
+import microsoft.exchange.webservices.data.property.complex.AttachmentCollection;
 import microsoft.exchange.webservices.data.property.complex.FolderId;
 import microsoft.exchange.webservices.data.property.complex.Mailbox;
 import microsoft.exchange.webservices.data.search.FindFoldersResults;
@@ -27,12 +30,14 @@ import microsoft.exchange.webservices.data.search.FolderView;
 import microsoft.exchange.webservices.data.search.ItemView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.net.URI;
 
 /**
  * @author Rana M Waqas
  */
+@Component
 public class MSExchange implements Input {
     static Logger log = LogManager.getLogger(MysqlConnect.class.getName());
 
@@ -45,24 +50,37 @@ public class MSExchange implements Input {
     @Setter
     @Getter
     String password;
+    @Setter
+    @Getter
+    MessageList messageList;
 
     @Override
     public void start() {
+        initialize();
 
     }
 
     @Override
-    public void fetch() {
-
+    public MessageList fetch() {
+        try {
+            Folder folder = searchFolder();
+            setMessageList(getSMTPMessages(folder));
+        } catch (Exception e) {
+            log.error("Exception ", e);
+        }
+        return getMessageList();
     }
 
     @Override
     public void stop() {
-
+        log.info("Closing the Exchange Service.");
+        getService().close();
     }
 
-
-    public MSExchange() {
+    /**
+     * Initialize the Exchange Service
+     */
+    public void initialize() {
         setMailbox(ApplicationConfigurations.getEmail());
         setPassword(ApplicationConfigurations.getEmailPassword());
 
@@ -82,7 +100,11 @@ public class MSExchange implements Input {
 
     }
 
-    public void findFolderId() {
+    /**
+     * Search for the folder in the Exchange Server
+     * @return
+     */
+    public Folder searchFolder() {
 
         try {
             Mailbox userMailbox = new Mailbox(mailbox);
@@ -96,17 +118,24 @@ public class MSExchange implements Input {
 
             for (Folder folder : findFolderResults) {
                 if (folder.getDisplayName().contains(ApplicationConfigurations.getFolderName())) {
-                    folder.load();
-                    getSMTPMessages(folder);
+
+                    return folder;
                 }
             }
         } catch (Exception e) {
             log.error("Exception ", e);
         }
+        return null;
     }
 
-    private void getSMTPMessages(Folder folder) throws Exception {
-
+    /**
+     * Gets messages from the Inbox folder.
+     * @param folder
+     * @return
+     * @throws Exception
+     */
+    private MessageList getSMTPMessages(Folder folder) throws Exception {
+        MessageList messageList = new MessageList();
         folder.load();
         if (folder.getTotalCount() > 0) {
             ItemView view2 = new ItemView(folder.getTotalCount());
@@ -119,13 +148,20 @@ public class MSExchange implements Input {
             for (Item item : findResults.getItems()) {
                 String body = item.getBody().toString().trim();
                 String subject = item.getSubject().trim();
+                AttachmentCollection attachments = item.getAttachments();
+
+                Message message = new Message();
+                message.setBody(body);
+                message.setSubject(subject);
+                message.setAttachments(attachments);
+
+                messageList.add(message);
+
                 item.delete(DeleteMode.HardDelete);
             }
         } else {
             log.error("There is no new email in folder");
         }
-
-        log.info("Closing the Exchange Service.");
-        getService().close();
+        return messageList;
     }
 }
