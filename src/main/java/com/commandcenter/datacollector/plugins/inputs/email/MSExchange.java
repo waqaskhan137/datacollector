@@ -102,7 +102,7 @@ public class MSExchange implements Input {
 
     /**
      * Search for the folder in the Exchange Server
-     * @return
+     * @return Folder
      */
     public Folder searchFolder() {
 
@@ -130,9 +130,9 @@ public class MSExchange implements Input {
 
     /**
      * Gets messages from the Inbox folder.
-     * @param folder
-     * @return
-     * @throws Exception
+     * @param folder Folder to get the messages from.
+     * @return MessageList
+     * @throws Exception If the folder doesn't exist throws an exception
      */
     private MessageList getSMTPMessages(Folder folder) throws Exception {
         MessageList messageList = new MessageList();
