@@ -21,7 +21,6 @@ import microsoft.exchange.webservices.data.core.service.schema.FolderSchema;
 import microsoft.exchange.webservices.data.core.service.schema.ItemSchema;
 import microsoft.exchange.webservices.data.credential.ExchangeCredentials;
 import microsoft.exchange.webservices.data.credential.WebCredentials;
-import microsoft.exchange.webservices.data.property.complex.AttachmentCollection;
 import microsoft.exchange.webservices.data.property.complex.FolderId;
 import microsoft.exchange.webservices.data.property.complex.Mailbox;
 import microsoft.exchange.webservices.data.search.FindFoldersResults;
@@ -33,6 +32,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
+import java.util.Date;
 
 /**
  * @author Rana M Waqas
@@ -102,6 +102,7 @@ public class MSExchange implements Input {
 
     /**
      * Search for the folder in the Exchange Server
+     *
      * @return Folder
      */
     public Folder searchFolder() {
@@ -130,6 +131,7 @@ public class MSExchange implements Input {
 
     /**
      * Gets messages from the Inbox folder.
+     *
      * @param folder Folder to get the messages from.
      * @return MessageList
      * @throws Exception If the folder doesn't exist throws an exception
@@ -148,13 +150,10 @@ public class MSExchange implements Input {
             for (Item item : findResults.getItems()) {
                 String body = item.getBody().toString().trim();
                 String subject = item.getSubject().trim();
-                AttachmentCollection attachments = item.getAttachments();
+                Date date = item.getDateTimeReceived();
 
-                Message message = new Message();
-                message.setBody(body);
-                message.setSubject(subject);
-                message.setAttachments(attachments);
 
+                Message message = new Message(body, subject, date);
                 messageList.add(message);
 
                 item.delete(DeleteMode.HardDelete);
