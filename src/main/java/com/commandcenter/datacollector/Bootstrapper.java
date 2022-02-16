@@ -15,7 +15,7 @@ public class Bootstrapper {
     public void start() {
         LOGGER.info("Starting the application");
         context = new AnnotationConfigApplicationContext();
-        context.scan("com.commandcenter.datacollector");
+        context.scan("com.commandcenter.datacollector.plugins");
         context.refresh();
 
         var msExchange = context.getBean(MSExchange.class);
@@ -39,6 +39,4 @@ public class Bootstrapper {
             }
         }
     }
-
-
 }

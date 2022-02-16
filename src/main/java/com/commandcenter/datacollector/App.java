@@ -1,22 +1,14 @@
 package com.commandcenter.datacollector;
 
-import com.commandcenter.datacollector.plugins.inputs.email.MSExchange;
-import com.commandcenter.datacollector.plugins.outputs.postgres.Postgres;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class App {
 
-    //    static Logger log = LogManager.getLogger(class.getName());
-    private AnnotationConfigApplicationContext context;
-
-    @Autowired
-    static Postgres postgres;
-    @Autowired
-    static MSExchange msExchange;
+    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
+        LOGGER.info("Starting Data Collector");
         Bootstrapper bootstrapper = new Bootstrapper();
         bootstrapper.start();
     }
