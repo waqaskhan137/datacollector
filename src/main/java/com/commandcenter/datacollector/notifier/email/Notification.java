@@ -5,6 +5,7 @@ import com.commandcenter.datacollector.notifier.Notifier;
 import com.sun.mail.smtp.SMTPTransport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -16,12 +17,12 @@ import java.util.Properties;
 public class Notification implements Notifier {
     static Logger log = LogManager.getLogger(Notification.class.getName());
 
+    @Autowired
+    ApplicationConfigurations applicationConfigurations;
+
     private String message;
     private String subject;
-    private static final String recipients = ApplicationConfigurations.getRecipients();
-    private static final String SMTP_SERVER = ApplicationConfigurations.getSmtpHost();
-    private static final String USERNAME = ApplicationConfigurations.getSmtpUserName();
-    private static final String PASSWORD = ApplicationConfigurations.getEmailPassword();
+
 
     private static final String EMAIL_FROM = "datacollector@luminent.com";
 
@@ -43,7 +44,7 @@ public class Notification implements Notifier {
             msg.setHeader("X-Priority", "1");
             msg.setFrom(new InternetAddress(EMAIL_FROM));
 
-            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients, false));
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(applicationConfigurations.recipients, false));
 
             msg.setSubject(subject);
 
@@ -53,7 +54,7 @@ public class Notification implements Notifier {
             SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
 
             // connect
-            t.connect(SMTP_SERVER, USERNAME, PASSWORD);
+            t.connect(applicationConfigurations.smtpHost, applicationConfigurations.email, applicationConfigurations.emailPassword);
 
             // send
             t.sendMessage(msg, msg.getAllRecipients());

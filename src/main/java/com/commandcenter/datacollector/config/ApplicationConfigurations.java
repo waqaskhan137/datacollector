@@ -1,24 +1,22 @@
 package com.commandcenter.datacollector.config;
 
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
+@Component
+@PropertySource("classpath:application.properties")
 public class ApplicationConfigurations {
-    @Getter @Setter
-    static String email;
-    @Getter @Setter
-    static String emailPassword;
-    @Getter @Setter
-    static String recipients;
-    @Getter @Setter
-    static String folderName;
-    @Getter @Setter
-    static int interval;
-    @Getter @Setter
-    static String smtpHost;
-    @Getter @Setter
-    static String smtpUserName;
-    @Getter @Setter
-    static String smtpPassword;
-
+    @Value("${email}")
+    public String email;
+    @Value("${password}")
+    public String emailPassword;
+    @Value("recipients")
+    public String recipients;
+    @Value("folderName")
+    public String folderName;
+    @Value("interval")
+    public int interval;
+    @Value("smtpHost")
+    public String smtpHost;
 }

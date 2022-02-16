@@ -1,9 +1,0 @@
-{
-  "AppConfigurations": {
-    "email": "youexchangeemail@email.com",
-    "password": "yourpassword",
-    "recipients": "afiniti.psautomation@ps-afiniti.com",
-    "folderName": "yourfolder",
-    "interval": "2"
-  }
-}

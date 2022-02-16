@@ -29,6 +29,7 @@ import microsoft.exchange.webservices.data.search.FolderView;
 import microsoft.exchange.webservices.data.search.ItemView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -40,6 +41,9 @@ import java.util.Date;
 @Component
 public class MSExchange implements Input {
     static Logger log = LogManager.getLogger(MysqlConnect.class.getName());
+
+    @Autowired
+    ApplicationConfigurations applicationConfigurations;
 
     @Setter
     @Getter
@@ -81,8 +85,8 @@ public class MSExchange implements Input {
      * Initialize the Exchange Service
      */
     public void initialize() {
-        setMailbox(ApplicationConfigurations.getEmail());
-        setPassword(ApplicationConfigurations.getEmailPassword());
+        setMailbox(applicationConfigurations.email);
+        setPassword(applicationConfigurations.emailPassword);
 
         service = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
         ExchangeCredentials credentials = new WebCredentials(getMailbox(), getPassword());
@@ -118,7 +122,7 @@ public class MSExchange implements Input {
             //find specific folder
 
             for (Folder folder : findFolderResults) {
-                if (folder.getDisplayName().contains(ApplicationConfigurations.getFolderName())) {
+                if (folder.getDisplayName().contains(applicationConfigurations.folderName)) {
 
                     return folder;
                 }
