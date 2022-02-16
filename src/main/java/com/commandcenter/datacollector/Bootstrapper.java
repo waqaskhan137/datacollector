@@ -21,16 +21,23 @@ public class Bootstrapper {
         var msExchange = context.getBean(MSExchange.class);
         var postgres = context.getBean(Postgres.class);
 
-        msExchange.start();
-        MessageList messageList = msExchange.fetch();
+        while (true) {
+            msExchange.start();
+            MessageList messageList = msExchange.fetch();
 
-        postgres.connect();
-        for (Message message : messageList.getMessages()) {
-            postgres.insert(message);
+            postgres.connect();
+            for (Message message : messageList.getMessages()) {
+                postgres.insert(message);
+            }
+            postgres.disconnect();
+            msExchange.stop();
+
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                LOGGER.info("InterruptedException: {}", e.getMessage());
+            }
         }
-        postgres.disconnect();
-        msExchange.stop();
-
     }
 
 
