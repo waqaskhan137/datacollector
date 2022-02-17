@@ -20,15 +20,9 @@ public class Bootstrapper {
         var postgres = context.getBean(Postgres.class);
 
         while (true) {
-            msExchange.start();
             LOGGER.info("Started the MS Exchange plugin");
+            msExchange.start();
             msExchange.fetch();
-
-//            postgres.connect();
-//            for (Message message : messageList.getMessages()) {
-//                postgres.insert(message);
-//            }
-//            postgres.disconnect();
             msExchange.stop();
 
             try {

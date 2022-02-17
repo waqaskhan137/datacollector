@@ -3,7 +3,6 @@ package com.commandcenter.datacollector.plugins.inputs.email;
 import com.commandcenter.datacollector.config.Configurations;
 import com.commandcenter.datacollector.plugins.inputs.Input;
 import com.commandcenter.datacollector.plugins.inputs.email.message.Message;
-import com.commandcenter.datacollector.plugins.inputs.email.message.MessageList;
 import com.commandcenter.datacollector.plugins.inputs.email.message.MessageRepository;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
-import java.util.Date;
 
 /**
  * @author Rana M Waqas
@@ -66,7 +64,6 @@ public class MSExchange implements Input {
         } catch (Exception e) {
             LOGGER.error("Exception ", e);
         }
-//        return getMessageList();
     }
 
     @Override
@@ -132,8 +129,7 @@ public class MSExchange implements Input {
      * @return MessageList
      * @throws Exception If the folder doesn't exist throws an exception
      */
-    private MessageList getSMTPMessages(Folder folder, MessageRepository repository) throws Exception {
-        MessageList messageList = new MessageList();
+    private void getSMTPMessages(Folder folder, MessageRepository repository) throws Exception {
         folder.load();
         if (folder.getTotalCount() > 0) {
             ItemView view2 = new ItemView(folder.getTotalCount());
@@ -144,17 +140,11 @@ public class MSExchange implements Input {
             service.loadPropertiesForItems(findResults, PropertySet.FirstClassProperties);
 
             for (Item item : findResults.getItems()) {
-                String body = item.getBody().toString().trim();
-                String subject = item.getSubject().trim();
-                Date date = item.getDateTimeReceived();
-
-                repository.save(new Message(subject, body, date));
-
+                repository.save(new Message(item.getSubject().trim(), item.getBody().toString().trim(), item.getDateTimeReceived()));
                 item.delete(DeleteMode.HardDelete);
             }
         } else {
-            LOGGER.error("There is no new email in folder");
+            LOGGER.info("There is no new email in folder");
         }
-        return messageList;
     }
 }
