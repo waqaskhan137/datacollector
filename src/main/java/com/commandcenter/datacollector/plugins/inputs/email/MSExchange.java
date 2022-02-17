@@ -1,6 +1,6 @@
 package com.commandcenter.datacollector.plugins.inputs.email;
 
-import com.commandcenter.datacollector.config.ApplicationConfigurations;
+import com.commandcenter.datacollector.config.Configurations;
 import com.commandcenter.datacollector.plugins.inputs.Input;
 import com.commandcenter.datacollector.plugins.inputs.email.message.Message;
 import com.commandcenter.datacollector.plugins.inputs.email.message.MessageList;
@@ -43,7 +43,7 @@ public class MSExchange implements Input {
     static Logger log = LogManager.getLogger(MysqlConnect.class.getName());
 
     @Autowired
-    ApplicationConfigurations applicationConfigurations;
+    Configurations configurations;
 
     @Setter
     @Getter
@@ -85,8 +85,8 @@ public class MSExchange implements Input {
      * Initialize the Exchange Service
      */
     public void initialize() {
-        setMailbox(applicationConfigurations.email);
-        setPassword(applicationConfigurations.emailPassword);
+        setMailbox(configurations.email);
+        setPassword(configurations.emailPassword);
 
         service = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
         ExchangeCredentials credentials = new WebCredentials(getMailbox(), getPassword());
@@ -122,7 +122,7 @@ public class MSExchange implements Input {
             //find specific folder
 
             for (Folder folder : findFolderResults) {
-                if (folder.getDisplayName().contains(applicationConfigurations.folderName)) {
+                if (folder.getDisplayName().contains(configurations.folderName)) {
 
                     return folder;
                 }

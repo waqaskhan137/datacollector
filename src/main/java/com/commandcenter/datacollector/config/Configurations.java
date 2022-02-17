@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource("classpath:application.properties")
-public class ApplicationConfigurations {
+public class Configurations {
     @Value("${email}")
     public String email;
     @Value("${password}")
@@ -16,7 +16,7 @@ public class ApplicationConfigurations {
     @Value("folderName")
     public String folderName;
     @Value("interval")
-    public int interval;
+    public String interval;
     @Value("smtpHost")
     public String smtpHost;
 }

@@ -15,7 +15,7 @@ public class Bootstrapper {
     public void start() {
         LOGGER.info("Starting the application");
         context = new AnnotationConfigApplicationContext();
-        context.scan("com.commandcenter.datacollector.plugins");
+        context.scan("com.commandcenter.datacollector");
         context.refresh();
 
         var msExchange = context.getBean(MSExchange.class);

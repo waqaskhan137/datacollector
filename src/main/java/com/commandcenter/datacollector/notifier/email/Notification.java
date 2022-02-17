@@ -1,6 +1,6 @@
 package com.commandcenter.datacollector.notifier.email;
 
-import com.commandcenter.datacollector.config.ApplicationConfigurations;
+import com.commandcenter.datacollector.config.Configurations;
 import com.commandcenter.datacollector.notifier.Notifier;
 import com.sun.mail.smtp.SMTPTransport;
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +18,7 @@ public class Notification implements Notifier {
     static Logger log = LogManager.getLogger(Notification.class.getName());
 
     @Autowired
-    ApplicationConfigurations applicationConfigurations;
+    Configurations configurations;
 
     private String message;
     private String subject;
@@ -44,7 +44,7 @@ public class Notification implements Notifier {
             msg.setHeader("X-Priority", "1");
             msg.setFrom(new InternetAddress(EMAIL_FROM));
 
-            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(applicationConfigurations.recipients, false));
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(configurations.recipients, false));
 
             msg.setSubject(subject);
 
@@ -54,7 +54,7 @@ public class Notification implements Notifier {
             SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
 
             // connect
-            t.connect(applicationConfigurations.smtpHost, applicationConfigurations.email, applicationConfigurations.emailPassword);
+            t.connect(configurations.smtpHost, configurations.email, configurations.emailPassword);
 
             // send
             t.sendMessage(msg, msg.getAllRecipients());
