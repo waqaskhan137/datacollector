@@ -23,6 +23,7 @@ public class Bootstrapper {
 
         while (true) {
             msExchange.start();
+            LOGGER.info("Started the MS Exchange plugin");
             MessageList messageList = msExchange.fetch();
 
             postgres.connect();

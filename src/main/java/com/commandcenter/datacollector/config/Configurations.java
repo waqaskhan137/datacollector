@@ -11,12 +11,12 @@ public class Configurations {
     public String email;
     @Value("${password}")
     public String emailPassword;
-    @Value("recipients")
+    @Value("${recipients}")
     public String recipients;
-    @Value("folderName")
+    @Value("${folderName}")
     public String folderName;
-    @Value("interval")
+    @Value("${interval}")
     public String interval;
-    @Value("smtpHost")
+    @Value("${smtpHost}")
     public String smtpHost;
 }

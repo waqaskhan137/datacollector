@@ -4,7 +4,6 @@ import com.commandcenter.datacollector.config.Configurations;
 import com.commandcenter.datacollector.plugins.inputs.Input;
 import com.commandcenter.datacollector.plugins.inputs.email.message.Message;
 import com.commandcenter.datacollector.plugins.inputs.email.message.MessageList;
-import com.commandcenter.datacollector.utils.MysqlConnect;
 import lombok.Getter;
 import lombok.Setter;
 import microsoft.exchange.webservices.data.core.ExchangeService;
@@ -27,8 +26,8 @@ import microsoft.exchange.webservices.data.search.FindFoldersResults;
 import microsoft.exchange.webservices.data.search.FindItemsResults;
 import microsoft.exchange.webservices.data.search.FolderView;
 import microsoft.exchange.webservices.data.search.ItemView;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,7 +39,8 @@ import java.util.Date;
  */
 @Component
 public class MSExchange implements Input {
-    static Logger log = LogManager.getLogger(MysqlConnect.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(MSExchange.class);
+
 
     @Autowired
     Configurations configurations;
@@ -70,14 +70,14 @@ public class MSExchange implements Input {
             Folder folder = searchFolder();
             setMessageList(getSMTPMessages(folder));
         } catch (Exception e) {
-            log.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         }
         return getMessageList();
     }
 
     @Override
     public void stop() {
-        log.info("Closing the Exchange Service.");
+        LOGGER.info("Closing the Exchange Service.");
         getService().close();
     }
 
@@ -87,7 +87,7 @@ public class MSExchange implements Input {
     public void initialize() {
         setMailbox(configurations.email);
         setPassword(configurations.emailPassword);
-
+        LOGGER.info("Checking the email and password " + configurations.email + " " + configurations.emailPassword);
         service = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
         ExchangeCredentials credentials = new WebCredentials(getMailbox(), getPassword());
         service.setCredentials(credentials);
@@ -98,7 +98,7 @@ public class MSExchange implements Input {
             setService(service);
 
         } catch (Exception e) {
-            log.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         }
 
 
@@ -120,15 +120,15 @@ public class MSExchange implements Input {
             view.setTraversal(FolderTraversal.Deep);
             FindFoldersResults findFolderResults = this.service.findFolders(rootFolder, view);
             //find specific folder
-
+            LOGGER.info("Folder to search for: " + configurations.folderName);
             for (Folder folder : findFolderResults) {
                 if (folder.getDisplayName().contains(configurations.folderName)) {
-
+                    LOGGER.info("Folder found " + folder.getDisplayName());
                     return folder;
                 }
             }
         } catch (Exception e) {
-            log.error("Exception ", e);
+            LOGGER.error("Exception ", e);
         }
         return null;
     }
@@ -163,7 +163,7 @@ public class MSExchange implements Input {
                 item.delete(DeleteMode.HardDelete);
             }
         } else {
-            log.error("There is no new email in folder");
+            LOGGER.error("There is no new email in folder");
         }
         return messageList;
     }
