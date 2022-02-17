@@ -44,7 +44,7 @@ public class MSExchange implements Input {
     @Autowired
     Configurations configurations;
     @Autowired
-    MessageRepository repository;
+    private MessageRepository repository;
     @Setter
     @Getter
     ExchangeService service;
@@ -53,14 +53,13 @@ public class MSExchange implements Input {
     @Override
     public void start() {
         initialize();
-
     }
 
     @Override
     public void fetch() {
         try {
             Folder folder = searchFolder();
-            getSMTPMessages(folder, repository);
+            getSMTPMessages(folder);
         } catch (Exception e) {
             LOGGER.error("Exception ", e);
         }
@@ -89,8 +88,6 @@ public class MSExchange implements Input {
         } catch (Exception e) {
             LOGGER.error("Exception ", e);
         }
-
-
     }
 
     /**
@@ -108,7 +105,6 @@ public class MSExchange implements Input {
             view.setPropertySet(new PropertySet(BasePropertySet.IdOnly, FolderSchema.DisplayName));
             view.setTraversal(FolderTraversal.Deep);
             FindFoldersResults findFolderResults = this.service.findFolders(rootFolder, view);
-            //find specific folder
             LOGGER.info("Folder to search for: " + configurations.folderName);
             for (Folder folder : findFolderResults) {
                 if (folder.getDisplayName().contains(configurations.folderName)) {
@@ -129,7 +125,7 @@ public class MSExchange implements Input {
      * @return MessageList
      * @throws Exception If the folder doesn't exist throws an exception
      */
-    private void getSMTPMessages(Folder folder, MessageRepository repository) throws Exception {
+    private void getSMTPMessages(Folder folder) throws Exception {
         folder.load();
         if (folder.getTotalCount() > 0) {
             ItemView view2 = new ItemView(folder.getTotalCount());
@@ -140,7 +136,9 @@ public class MSExchange implements Input {
             service.loadPropertiesForItems(findResults, PropertySet.FirstClassProperties);
 
             for (Item item : findResults.getItems()) {
+
                 repository.save(new Message(item.getSubject().trim(), item.getBody().toString().trim(), item.getDateTimeReceived()));
+
                 item.delete(DeleteMode.HardDelete);
             }
         } else {

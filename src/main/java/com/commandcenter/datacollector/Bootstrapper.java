@@ -1,7 +1,6 @@
 package com.commandcenter.datacollector;
 
 import com.commandcenter.datacollector.plugins.inputs.email.MSExchange;
-import com.commandcenter.datacollector.plugins.outputs.postgres.Postgres;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -17,7 +16,6 @@ public class Bootstrapper {
         context.refresh();
 
         var msExchange = context.getBean(MSExchange.class);
-        var postgres = context.getBean(Postgres.class);
 
         while (true) {
             LOGGER.info("Started the MS Exchange plugin");

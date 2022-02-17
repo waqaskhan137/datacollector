@@ -1,16 +1,16 @@
 package com.commandcenter.datacollector.plugins.inputs.email.message;
 
-import org.hibernate.annotations.Entity;
-
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
 public class Message {
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     String body;
     String subject;
