@@ -4,6 +4,7 @@ import com.commandcenter.datacollector.config.Configurations;
 import com.commandcenter.datacollector.plugins.inputs.Input;
 import com.commandcenter.datacollector.plugins.inputs.email.message.Message;
 import com.commandcenter.datacollector.plugins.inputs.email.message.MessageList;
+import com.commandcenter.datacollector.plugins.inputs.email.message.MessageRepository;
 import lombok.Getter;
 import lombok.Setter;
 import microsoft.exchange.webservices.data.core.ExchangeService;
@@ -44,19 +45,12 @@ public class MSExchange implements Input {
 
     @Autowired
     Configurations configurations;
-
+    @Autowired
+    MessageRepository repository;
     @Setter
     @Getter
     ExchangeService service;
-    @Setter
-    @Getter
-    String mailbox;
-    @Setter
-    @Getter
-    String password;
-    @Setter
-    @Getter
-    MessageList messageList;
+
 
     @Override
     public void start() {
@@ -65,14 +59,14 @@ public class MSExchange implements Input {
     }
 
     @Override
-    public MessageList fetch() {
+    public void fetch() {
         try {
             Folder folder = searchFolder();
-            setMessageList(getSMTPMessages(folder));
+            getSMTPMessages(folder, repository);
         } catch (Exception e) {
             LOGGER.error("Exception ", e);
         }
-        return getMessageList();
+//        return getMessageList();
     }
 
     @Override
@@ -85,11 +79,9 @@ public class MSExchange implements Input {
      * Initialize the Exchange Service
      */
     public void initialize() {
-        setMailbox(configurations.email);
-        setPassword(configurations.emailPassword);
         LOGGER.info("Checking the email and password " + configurations.email + " " + configurations.emailPassword);
         service = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
-        ExchangeCredentials credentials = new WebCredentials(getMailbox(), getPassword());
+        ExchangeCredentials credentials = new WebCredentials(configurations.email, configurations.emailPassword);
         service.setCredentials(credentials);
         service.setTraceEnabled(false);
 
@@ -112,7 +104,7 @@ public class MSExchange implements Input {
     public Folder searchFolder() {
 
         try {
-            Mailbox userMailbox = new Mailbox(mailbox);
+            Mailbox userMailbox = new Mailbox(configurations.email);
             FolderId rootFolder = new FolderId(WellKnownFolderName.Inbox, userMailbox);
 
             FolderView view = new FolderView(Integer.MAX_VALUE);
@@ -140,7 +132,7 @@ public class MSExchange implements Input {
      * @return MessageList
      * @throws Exception If the folder doesn't exist throws an exception
      */
-    private MessageList getSMTPMessages(Folder folder) throws Exception {
+    private MessageList getSMTPMessages(Folder folder, MessageRepository repository) throws Exception {
         MessageList messageList = new MessageList();
         folder.load();
         if (folder.getTotalCount() > 0) {
@@ -156,9 +148,7 @@ public class MSExchange implements Input {
                 String subject = item.getSubject().trim();
                 Date date = item.getDateTimeReceived();
 
-
-                Message message = new Message(body, subject, date);
-                messageList.add(message);
+                repository.save(new Message(subject, body, date));
 
                 item.delete(DeleteMode.HardDelete);
             }

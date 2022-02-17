@@ -1,6 +1,5 @@
 package com.commandcenter.datacollector.plugins.inputs;
 
-import com.commandcenter.datacollector.plugins.inputs.email.message.MessageList;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,7 +14,7 @@ public interface Input {
      *
      * @return
      */
-    public MessageList fetch();
+    public void fetch();
 
     /**
      * Stop the input.

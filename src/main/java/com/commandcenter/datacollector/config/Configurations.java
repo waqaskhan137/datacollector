@@ -19,4 +19,12 @@ public class Configurations {
     public String interval;
     @Value("${smtpHost}")
     public String smtpHost;
+    @Value("${postgresHost}")
+    public String postgresHost;
+    @Value("${postgresPort}")
+    public String postgresPort;
+    @Value("${postgresUser}")
+    public String postgresUser;
+    @Value("${postgresPassword}")
+    public String postgresPassword;
 }

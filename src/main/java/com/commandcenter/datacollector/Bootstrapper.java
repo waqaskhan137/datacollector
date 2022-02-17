@@ -1,8 +1,6 @@
 package com.commandcenter.datacollector;
 
 import com.commandcenter.datacollector.plugins.inputs.email.MSExchange;
-import com.commandcenter.datacollector.plugins.inputs.email.message.Message;
-import com.commandcenter.datacollector.plugins.inputs.email.message.MessageList;
 import com.commandcenter.datacollector.plugins.outputs.postgres.Postgres;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +22,13 @@ public class Bootstrapper {
         while (true) {
             msExchange.start();
             LOGGER.info("Started the MS Exchange plugin");
-            MessageList messageList = msExchange.fetch();
+            msExchange.fetch();
 
-            postgres.connect();
-            for (Message message : messageList.getMessages()) {
-                postgres.insert(message);
-            }
-            postgres.disconnect();
+//            postgres.connect();
+//            for (Message message : messageList.getMessages()) {
+//                postgres.insert(message);
+//            }
+//            postgres.disconnect();
             msExchange.stop();
 
             try {
